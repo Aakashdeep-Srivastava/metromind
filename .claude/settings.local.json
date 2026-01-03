@@ -13,7 +13,9 @@
       "Bash(vercel link:*)",
       "Bash(vercel:*)",
       "Bash(pnpm build:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(gh --version:*)",
+      "Bash(ls:*)"
     ]
   }
 }
