@@ -1,11 +1,12 @@
-import type * as google from "google.maps"
-
 const BENGALURU_CENTER = {
   lat: 12.9716,
   lng: 77.5946,
 }
 
-export const mapOptions: google.maps.MapOptions = {
+// Google Maps options type (using any since @types/google.maps is a global namespace)
+type GoogleMapsOptions = any
+
+export const mapOptions: GoogleMapsOptions = {
   center: BENGALURU_CENTER,
   zoom: 12,
   mapTypeId: "roadmap",
@@ -29,7 +30,7 @@ export const mapOptions: google.maps.MapOptions = {
   ],
 }
 
-export const mobileMapOptions: google.maps.MapOptions = {
+export const mobileMapOptions: GoogleMapsOptions = {
   ...mapOptions,
   gestureHandling: "greedy",
   zoomControl: false,

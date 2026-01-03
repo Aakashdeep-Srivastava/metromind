@@ -18,6 +18,10 @@ export const config = {
       key: process.env.NEXT_PUBLIC_GEMINI_API_KEY,
       required: false,
     },
+    openWeather: {
+      key: process.env.NEXT_PUBLIC_OPENWEATHER_API_KEY,
+      required: false,
+    },
   },
 
   // Clerk authentication (configured via environment variables)
@@ -49,6 +53,7 @@ export const config = {
     geocoding: "https://maps.googleapis.com/maps/api/geocode/json",
     places: "https://maps.googleapis.com/maps/api/place/nearbysearch/json",
     directions: "https://maps.googleapis.com/maps/api/directions/json",
+    weather: "https://api.openweathermap.org/data/2.5",
   },
 
   // Cache settings

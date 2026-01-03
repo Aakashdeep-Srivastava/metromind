@@ -4,16 +4,24 @@ import { useRouter, usePathname } from "next/navigation"
 import { Home, MapPin, Camera, Bell, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAuth } from "@/contexts/auth-context"
+import { motion } from "framer-motion"
 
 export function BottomNav({ className }: { className?: string }) {
   const router = useRouter()
   const pathname = usePathname()
   const { requireAuth } = useAuth()
 
-  // All tabs are now accessible - requireAuth just shows prompt but allows access
+  // Haptic feedback for supported devices
+  const triggerHaptic = () => {
+    if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+      navigator.vibrate(10)
+    }
+  }
+
   const handleTabClick = (path: string, action?: string) => {
+    triggerHaptic()
     if (action) {
-      requireAuth(action) // This will show prompt but still allow access
+      requireAuth(action)
     }
     router.push(path)
   }
@@ -34,8 +42,8 @@ export function BottomNav({ className }: { className?: string }) {
         className,
       )}
     >
-      <nav className="flex items-center h-full px-4">
-        {tabs.map((tab, index) => {
+      <nav className="flex items-center h-full px-2">
+        {tabs.map((tab) => {
           const Icon = tab.icon
           const isActive =
             (pathname === "/" && tab.path === "/dashboard") || (pathname !== "/" && pathname.startsWith(tab.path))
@@ -46,35 +54,58 @@ export function BottomNav({ className }: { className?: string }) {
           if (isAccent) {
             return (
               <div key={tab.id} className="flex-1 flex justify-center">
-                <button
+                <motion.button
                   onClick={onClick}
+                  whileTap={{ scale: 0.95 }}
                   className={cn(
-                    "px-6 h-12 rounded-full flex items-center justify-center gap-2 shadow-lg transition-transform duration-300 ease-in-out hover:scale-105",
+                    "px-5 h-11 rounded-full flex items-center justify-center gap-2 shadow-lg",
                     "bg-primary text-primary-foreground",
+                    "active:shadow-md transition-shadow"
                   )}
                   aria-label={tab.label}
                 >
-                  <Icon size={20} />
+                  <Icon size={18} />
                   <span className="font-bold text-sm">{tab.label}</span>
-                </button>
+                </motion.button>
               </div>
             )
           }
 
           return (
-            <button
+            <motion.button
               key={tab.id}
               onClick={onClick}
+              whileTap={{ scale: 0.9 }}
               className={cn(
-                "flex-1 flex flex-col items-center justify-center h-full",
+                "flex-1 flex flex-col items-center justify-center h-full relative",
                 "transition-colors duration-200",
                 isActive ? "text-primary" : "text-muted-foreground",
               )}
               aria-label={tab.label}
             >
-              <Icon size={24} className="mb-1" />
-              <span className={cn("text-xs font-medium", isActive ? "font-bold" : "font-normal")}>{tab.label}</span>
-            </button>
+              <motion.div
+                animate={{ 
+                  scale: isActive ? 1.1 : 1,
+                  y: isActive ? -2 : 0
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              >
+                <Icon size={22} className="mb-0.5" />
+              </motion.div>
+              <span className={cn(
+                "text-[10px] transition-all",
+                isActive ? "font-bold" : "font-medium"
+              )}>
+                {tab.label}
+              </span>
+              {isActive && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute -bottom-0 w-1 h-1 rounded-full bg-primary"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                />
+              )}
+            </motion.button>
           )
         })}
       </nav>

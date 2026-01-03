@@ -560,7 +560,7 @@ export default function ReportPage() {
             <p className="text-green-700 mb-4">
               {analysis 
                 ? `AI detected: ${analysis.category} incident with ${analysis.severity} severity. ${
-                    analysis.severity === 'critical' || analysis.severity === 'high' 
+                    analysis.severity === 'high' 
                       ? 'Emergency authorities have been notified automatically.'
                       : 'Relevant authorities have been notified.'
                   }`

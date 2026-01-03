@@ -439,7 +439,6 @@ export default function InsightsPage() {
                           <Switch
                             checked={subscription.enabled}
                             onCheckedChange={() => toggleNotification(subscription.id.replace("_", ""))}
-                            size="sm"
                           />
                         </div>
                         <p className="text-sm text-muted-foreground mb-2">{subscription.description}</p>

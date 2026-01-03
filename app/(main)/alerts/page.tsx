@@ -162,7 +162,7 @@ export default function AlertsPage() {
                 <div className={`w-2 h-2 rounded-full ${area.active ? "bg-green-500" : "bg-gray-300"}`} />
                 <span className="font-medium">{area.name}</span>
               </div>
-              <Switch checked={area.active} onCheckedChange={() => {}} size="sm" />
+              <Switch checked={area.active} onCheckedChange={() => {}} />
             </div>
           ))}
         </CardContent>
@@ -182,7 +182,7 @@ export default function AlertsPage() {
               <div className="flex items-center gap-3">
                 <div className="capitalize font-medium">{key}</div>
               </div>
-              <Switch checked={value} onCheckedChange={() => togglePreference(key)} size="sm" />
+              <Switch checked={value} onCheckedChange={() => togglePreference(key)} />
             </div>
           ))}
         </CardContent>

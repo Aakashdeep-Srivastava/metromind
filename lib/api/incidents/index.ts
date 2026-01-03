@@ -1,10 +1,10 @@
 // lib/api/incidents/index.ts
 import { apiClient } from '../client';
 import { API_CONFIG } from '../config';
-import type { 
-  ApiResponse, 
+import type {
+  ApiResponse,
   PaginatedResponse,
-  Incident, 
+  Incident,
   CreateIncidentRequest,
   UpdateIncidentStatusRequest,
   Location,
@@ -12,6 +12,9 @@ import type {
   IncidentSeverity,
   IncidentStatus
 } from '../../../types/api';
+
+// Re-export types for consumers
+export type { Incident, IncidentCategory, IncidentSeverity, IncidentStatus } from '../../../types/api';
 
 export interface GetIncidentsQuery {
   page?: number;

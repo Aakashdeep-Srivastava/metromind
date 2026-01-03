@@ -24,13 +24,13 @@ export class ApiClient {
   }
 
   private async getAuthToken(): Promise<string | null> {
-    // This will integrate with your Firebase auth
+    // Get token from Clerk auth
     try {
       if (typeof window !== 'undefined') {
-        const { getAuth } = await import('firebase/auth');
-        const auth = getAuth();
-        if (auth.currentUser) {
-          return await auth.currentUser.getIdToken();
+        // Clerk exposes the session on the window object after initialization
+        const clerk = (window as any).Clerk;
+        if (clerk?.session) {
+          return await clerk.session.getToken();
         }
       }
     } catch (error) {

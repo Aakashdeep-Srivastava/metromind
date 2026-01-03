@@ -9,6 +9,7 @@ import { Toaster } from "@/components/ui/toaster"
 import { LocationProvider } from "@/contexts/location-context"
 import { config } from "@/lib/config"
 import { ErrorBoundary } from "@/components/error-boundary"
+import { ThemeProvider } from "@/components/theme-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -57,13 +58,13 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#87ECE8" },
-    { media: "(prefers-color-scheme: dark)", color: "#87ECE8" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1F1F2E" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -78,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
@@ -90,12 +91,19 @@ export default function RootLayout({
       <body className={cn("bg-background font-sans antialiased", inter.className)}>
         <ClerkProvider>
           <ErrorBoundary>
-            <LocationProvider>
-              <AuthProvider>
-                {children}
-                <Toaster />
-              </AuthProvider>
-            </LocationProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <LocationProvider>
+                <AuthProvider>
+                  {children}
+                  <Toaster />
+                </AuthProvider>
+              </LocationProvider>
+            </ThemeProvider>
           </ErrorBoundary>
         </ClerkProvider>
       </body>

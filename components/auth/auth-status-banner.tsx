@@ -8,7 +8,7 @@ import Link from "next/link"
 import { useState, useEffect } from "react"
 
 export function AuthStatusBanner() {
-  const { isConfigValid, authState, retryAuth, isLoading } = useAuth()
+  const { isConfigValid, authState, signIn, isLoading } = useAuth()
   const [showBanner, setShowBanner] = useState(false)
   const [bannerType, setBannerType] = useState<"demo" | "retry" | "success">("demo")
 
@@ -76,7 +76,7 @@ export function AuthStatusBanner() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={retryAuth}
+                onClick={signIn}
                 disabled={isLoading}
                 className="border-blue-300 text-blue-700 hover:bg-blue-100 bg-transparent"
               >
@@ -85,7 +85,7 @@ export function AuthStatusBanner() {
                 ) : (
                   <RefreshCw className="h-4 w-4 mr-1" />
                 )}
-                Retry Auth
+                Sign In
               </Button>
             )}
             <Button

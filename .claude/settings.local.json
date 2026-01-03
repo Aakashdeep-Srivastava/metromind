@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm add:*)",
+      "Bash(gh repo rename:*)",
+      "Bash(git add:*)",
+      "Bash(git push:*)",
+      "Bash(powershell:*)",
+      "Bash(pnpm run dev)",
+      "Bash(tree:*)",
+      "Bash(cat:*)",
+      "Bash(pnpm update:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel:*)",
+      "Bash(pnpm build:*)",
+      "Bash(git commit:*)"
+    ]
+  }
+}
