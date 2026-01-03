@@ -30,70 +30,74 @@ function generateLocationBasedNews(city: string, district: string): NewsItem[] {
   const categories: NewsItem['category'][] = ['traffic', 'weather', 'local', 'emergency', 'events', 'general']
   const priorities: NewsItem['priority'][] = ['low', 'medium', 'high', 'urgent']
 
+  // Universal templates that work for any location
+  const locationCity = city || 'Your City'
+  const locationDistrict = district || 'Your Area'
+
   const newsTemplates = [
     // Traffic
     {
       category: 'traffic' as const,
       templates: [
-        { title: `Heavy traffic on ORR near ${district}`, desc: 'Expect 25-30 min delays. Alt route via Sarjapur recommended.' },
-        { title: 'Metro Green Line running smoothly', desc: 'All stations operational. Peak hour frequency: 4 mins.' },
-        { title: `Road work on MG Road affecting ${district} commuters`, desc: 'Single lane open. Use Residency Road instead.' },
-        { title: 'Silk Board Junction congestion easing', desc: 'Traffic normalized after morning peak. Current wait: 8 mins.' },
-        { title: `New flyover opens near ${district}`, desc: 'Reduces travel time by 15 mins to Electronic City.' },
+        { title: `Heavy traffic reported near ${locationDistrict}`, desc: 'Expect 20-30 min delays. Consider alternate routes.' },
+        { title: 'Public transit running on schedule', desc: 'All lines operational. Peak hour frequency normal.' },
+        { title: `Road construction in ${locationDistrict} area`, desc: 'Lane closures in effect. Plan extra travel time.' },
+        { title: 'Main junction traffic clearing', desc: 'Flow normalizing after morning rush hour.' },
+        { title: `New route opens near ${locationDistrict}`, desc: 'Expected to reduce commute times for residents.' },
       ],
     },
     // Weather
     {
       category: 'weather' as const,
       templates: [
-        { title: `Light showers expected in ${district}`, desc: 'Carry umbrella. Clearing by evening.' },
-        { title: `AQI Alert: ${city} air quality moderate`, desc: 'AQI: 142. Sensitive groups should limit outdoor activity.' },
-        { title: 'Pleasant weather continues', desc: `${city} enjoying 24°C with light breeze. Perfect for outdoor activities.` },
-        { title: 'UV Index high today', desc: 'Apply sunscreen if outdoors between 11 AM - 3 PM.' },
-        { title: 'Fog advisory for early morning', desc: 'Visibility may drop below 500m. Drive carefully.' },
+        { title: `Weather update for ${locationDistrict}`, desc: 'Check forecast before heading out today.' },
+        { title: `Air Quality Alert: ${locationCity}`, desc: 'Monitor AQI levels. Take precautions if sensitive.' },
+        { title: `${locationCity} weather favorable`, desc: 'Comfortable conditions. Good for outdoor activities.' },
+        { title: 'UV levels elevated today', desc: 'Sun protection recommended if outdoors.' },
+        { title: 'Visibility advisory', desc: 'Reduced visibility possible. Drive with caution.' },
       ],
     },
     // Local
     {
       category: 'local' as const,
       templates: [
-        { title: `New co-working space opens in ${district}`, desc: 'Offers 500 seats with modern amenities. Early bird discounts.' },
-        { title: `${district} residents get new park`, desc: '5-acre green space with jogging track and kids play area.' },
-        { title: 'BBMP starts pothole repair drive', desc: `${district} roads to be fixed by month-end.` },
-        { title: `Smart parking system launches in ${district}`, desc: 'Find parking spots via app. 50% slots now sensor-enabled.' },
-        { title: 'Water supply schedule updated', desc: `${district} timings changed to 6-8 AM and 6-8 PM.` },
+        { title: `New business opens in ${locationDistrict}`, desc: 'Local economy growing with new establishments.' },
+        { title: `${locationDistrict} community improvements`, desc: 'New facilities being added for residents.' },
+        { title: `Infrastructure upgrades in ${locationDistrict}`, desc: 'Roads and utilities being modernized.' },
+        { title: `Smart city initiative in ${locationCity}`, desc: 'Digital services expanding across the area.' },
+        { title: 'Utility schedule update', desc: `${locationDistrict} service timings adjusted.` },
       ],
     },
     // Emergency
     {
       category: 'emergency' as const,
       templates: [
-        { title: `Fire station drill in ${district}`, desc: 'Mock emergency response today. Expect sirens 2-4 PM.' },
-        { title: 'Power outage scheduled', desc: `Maintenance in ${district}. Backup advised for 10 AM - 2 PM.` },
-        { title: 'Gas leak contained in Indiranagar', desc: 'Area safe. Residents can return. GAIL teams on site.' },
-        { title: 'Tree fall cleared on main road', desc: 'Traffic restored in 30 mins. No injuries reported.' },
+        { title: `Safety drill in ${locationDistrict}`, desc: 'Emergency response exercise planned.' },
+        { title: 'Scheduled maintenance', desc: `Brief service interruption in ${locationDistrict}.` },
+        { title: 'Incident resolved', desc: 'Emergency services responded promptly. Area clear.' },
+        { title: 'Road hazard cleared', desc: 'Traffic flow restored. No injuries reported.' },
       ],
     },
     // Events
     {
       category: 'events' as const,
       templates: [
-        { title: `Weekend market at ${district}`, desc: 'Local artisans, food stalls. Saturday 10 AM - 8 PM.' },
-        { title: 'Tech meetup at Koramangala', desc: 'AI & ML workshop. Free entry with registration.' },
-        { title: 'IPL match traffic advisory', desc: 'Chinnaswamy area congested 4-11 PM. Use metro.' },
-        { title: 'Food festival this weekend', desc: `${district} hosts cuisines from 15 states. Entry free.` },
-        { title: 'Marathon route affects traffic', desc: 'Cubbon Park to MG Road closed Sunday 5-10 AM.' },
+        { title: `Community event in ${locationDistrict}`, desc: 'Local gathering this weekend. All welcome.' },
+        { title: `${locationCity} cultural festival`, desc: 'Celebrating local heritage and traditions.' },
+        { title: 'Sports event traffic advisory', desc: 'Expect crowds near venue. Use public transit.' },
+        { title: `Food & entertainment in ${locationDistrict}`, desc: 'Local vendors showcase specialties.' },
+        { title: 'Charity run this weekend', desc: 'Some roads may have temporary closures.' },
       ],
     },
     // General
     {
       category: 'general' as const,
       templates: [
-        { title: `${city} ranks #3 in startup ecosystem`, desc: 'New report highlights tech hub growth. 45K+ startups active.' },
-        { title: 'Metro Phase 3 progress update', desc: '60% complete. Airport line expected by 2026.' },
-        { title: `${city} to get 100 e-buses`, desc: 'Green initiative to reduce emissions by 30%.' },
-        { title: 'Digital payment adoption at 92%', desc: `${city} leads in UPI transactions among Indian cities.` },
-        { title: 'New IT park announced', desc: `12-acre campus near ${district}. 20,000 jobs expected.` },
+        { title: `${locationCity} development update`, desc: 'City continues growth with new investments.' },
+        { title: 'Public transit expansion', desc: 'New routes to improve city connectivity.' },
+        { title: `${locationCity} sustainability initiative`, desc: 'Green programs launching to improve environment.' },
+        { title: 'Digital services expanding', desc: `${locationCity} enhancing online civic services.` },
+        { title: `Economic opportunity in ${locationDistrict}`, desc: 'New developments creating jobs.' },
       ],
     },
   ]
@@ -110,7 +114,7 @@ function generateLocationBasedNews(city: string, district: string): NewsItem[] {
         id: `news-${catIndex}-${idx}-${Date.now()}`,
         title: template.title,
         description: template.desc,
-        source: ['TOI Bengaluru', 'Deccan Herald', 'Bangalore Mirror', 'The Hindu', 'Indian Express'][Math.floor(Math.random() * 5)],
+        source: ['Local News', 'City Times', 'Metro Daily', 'Urban Report', 'City Pulse'][Math.floor(Math.random() * 5)],
         category: categoryData.category,
         timestamp,
         location: district,

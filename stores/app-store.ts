@@ -68,14 +68,14 @@ export interface AppState {
 export const useAppStore = create<AppState>()(
   persist(
     immer((set) => ({
-      // Location
+      // Location - will be updated by geolocation
       location: {
-        latitude: 12.9716,
-        longitude: 77.5946,
-        city: 'Bengaluru',
-        district: 'Bengaluru Urban',
+        latitude: 0,
+        longitude: 0,
+        city: '',
+        district: '',
         locality: '',
-        isLoading: false,
+        isLoading: true,
         error: null,
         lastUpdated: null,
       },
