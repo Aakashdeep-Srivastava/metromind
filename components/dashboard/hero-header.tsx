@@ -41,6 +41,7 @@ const weatherEmoji: Record<number, string> = {
 export function HeroHeader({ isRefreshing, onRefresh, weather }: HeroHeaderProps) {
   const { location } = useAppStore()
   const currentHour = new Date().getHours()
+  const isLocationLoading = location.isLoading || (!location.city && !location.district)
 
   const getGreeting = () => {
     if (currentHour < 12) return 'Good Morning'
@@ -130,7 +131,13 @@ export function HeroHeader({ isRefreshing, onRefresh, weather }: HeroHeaderProps
               transition={{ delay: 0.3 }}
               className="text-2xl font-bold text-white mb-3"
             >
-              {location.district || 'Your Area'}
+              {isLocationLoading ? (
+                <span className="flex items-center gap-2">
+                  <span className="w-32 h-7 bg-white/20 rounded-lg animate-pulse" />
+                </span>
+              ) : (
+                location.district || 'Your Area'
+              )}
             </motion.h1>
 
             <motion.div
@@ -141,9 +148,13 @@ export function HeroHeader({ isRefreshing, onRefresh, weather }: HeroHeaderProps
             >
               <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-white/20 backdrop-blur-sm">
                 <MapPin className="w-3.5 h-3.5 text-white" />
-                <span className="text-white text-sm font-medium">
-                  {location.city}
-                </span>
+                {isLocationLoading ? (
+                  <span className="w-20 h-4 bg-white/30 rounded animate-pulse" />
+                ) : (
+                  <span className="text-white text-sm font-medium">
+                    {location.city || 'Detecting...'}
+                  </span>
+                )}
               </div>
 
               {weather && (
