@@ -12,7 +12,7 @@
 
 *Real-time city intelligence powered by coordinated AI agents*
 
-[🚀 Live Demo](https://metromind.vercel.app) • [📱 Install PWA](https://metromind.vercel.app) • [📖 Documentation](#documentation)
+[🚀 Live Demo](https://metromind-one.vercel.app) • [📱 Install PWA](https://metromind-one.vercel.app) • [📖 Documentation](#documentation)
 
 </div>
 
@@ -102,7 +102,7 @@ Coordinated Multi-Agent Architecture
 ### **📱 For Citizens (Users)**
 
 **Option 1: Install PWA (Recommended)**
-1. Visit [metromind.vercel.app](https://metromind.vercel.app) on your mobile device
+1. Visit [metromind-one.vercel.app](https://metromind-one.vercel.app) on your mobile device
 2. Tap the "Install" button or "Add to Home Screen"
 3. Launch from your home screen like any native app!
 
