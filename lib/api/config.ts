@@ -1,10 +1,10 @@
-// API Configuration for XphoraPulse
+// API Configuration for MetroMind
 export const API_CONFIG = {
   // Base URLs
-  BASE_URL: process.env.NODE_ENV === 'production' 
-    ? 'https://us-central1-xphorapulse.cloudfunctions.net'
-    : 'http://localhost:5001/xphorapulse/us-central1',
-  
+  BASE_URL: process.env.NODE_ENV === 'production'
+    ? 'https://us-central1-metromind.cloudfunctions.net'
+    : 'http://localhost:5001/metromind/us-central1',
+
   // API Endpoints
   ENDPOINTS: {
     // Authentication
@@ -14,7 +14,7 @@ export const API_CONFIG = {
       VERIFY: '/auth/verify',
       REFRESH: '/auth/refresh',
     },
-    
+
     // Incidents Management
     INCIDENTS: {
       CREATE: '/incidents/create',
@@ -24,7 +24,7 @@ export const API_CONFIG = {
       DELETE: '/incidents/{id}',
       GET_NEARBY: '/incidents/nearby',
     },
-    
+
     // Alerts System
     ALERTS: {
       CREATE: '/alerts/create',
@@ -33,7 +33,7 @@ export const API_CONFIG = {
       UPDATE_STATUS: '/alerts/{id}/status',
       SUBSCRIBE: '/alerts/subscribe',
     },
-    
+
     // Maps & Location
     MAPS: {
       GEOCODE: '/maps/geocode',
@@ -42,7 +42,7 @@ export const API_CONFIG = {
       DIRECTIONS: '/maps/directions',
       TRAFFIC: '/maps/traffic',
     },
-    
+
     // Weather Services
     WEATHER: {
       CURRENT: '/weather/current',
@@ -50,7 +50,7 @@ export const API_CONFIG = {
       AIR_QUALITY: '/weather/air-quality',
       ALERTS: '/weather/alerts',
     },
-    
+
     // AI Services
     AI: {
       ANALYZE_IMAGE: '/ai/analyze-image',
@@ -58,7 +58,7 @@ export const API_CONFIG = {
       GENERATE_INSIGHTS: '/ai/generate-insights',
       SENTIMENT_ANALYSIS: '/ai/sentiment',
     },
-    
+
     // Emergency Services
     EMERGENCY: {
       CREATE_ALERT: '/emergency/alert',
@@ -66,7 +66,7 @@ export const API_CONFIG = {
       UPDATE_STATUS: '/emergency/{id}/status',
       NOTIFY_AUTHORITIES: '/emergency/notify',
     },
-    
+
     // Notifications
     NOTIFICATIONS: {
       SEND: '/notifications/send',
@@ -74,7 +74,7 @@ export const API_CONFIG = {
       UNSUBSCRIBE: '/notifications/unsubscribe',
       HISTORY: '/notifications/history',
     },
-    
+
     // Reports & Analytics
     REPORTS: {
       GENERATE: '/reports/generate',
@@ -82,7 +82,7 @@ export const API_CONFIG = {
       EXPORT: '/reports/export',
       DASHBOARD_DATA: '/reports/dashboard',
     },
-    
+
     // Media Upload
     MEDIA: {
       UPLOAD: '/media/upload',
@@ -91,14 +91,14 @@ export const API_CONFIG = {
       PROCESS: '/media/process',
     },
   },
-  
+
   // Request timeouts (ms)
   TIMEOUTS: {
     DEFAULT: 10000,
     UPLOAD: 30000,
     AI_PROCESSING: 60000,
   },
-  
+
   // Error codes
   ERROR_CODES: {
     NETWORK_ERROR: 'NETWORK_ERROR',

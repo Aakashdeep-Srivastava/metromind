@@ -2,7 +2,16 @@
 
 import { createContext, useContext, useState, type ReactNode, useCallback, useEffect } from "react"
 import { useToast } from "@/components/ui/use-toast"
-import { fetchLocationDetails } from "@/lib/google-services"
+import { reverseGeocode } from "@/lib/osm-services"
+
+// Default location (Bengaluru)
+const DEFAULT_LOCATION = {
+  lat: 12.9716,
+  lng: 77.5946,
+  district: "Bengaluru Urban",
+  city: "Bengaluru",
+  country: "India",
+}
 
 interface LocationState {
   district: string | null
@@ -25,42 +34,26 @@ interface LocationState {
 const LocationContext = createContext<LocationState | undefined>(undefined)
 
 export function LocationProvider({ children }: { children: ReactNode }) {
-  const [district, setDistrict] = useState<string | null>(null)
-  const [city, setCity] = useState<string | null>(null)
-  const [country, setCountry] = useState<string | null>(null)
-  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
+  // Initialize with default location
+  const [district, setDistrict] = useState<string | null>(DEFAULT_LOCATION.district)
+  const [city, setCity] = useState<string | null>(DEFAULT_LOCATION.city)
+  const [country, setCountry] = useState<string | null>(DEFAULT_LOCATION.country)
+  const [coords, setCoords] = useState<{ lat: number; lng: number } | null>({ lat: DEFAULT_LOCATION.lat, lng: DEFAULT_LOCATION.lng })
   const [error, setError] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const { toast } = useToast()
 
   const fetchCityName = useCallback(
     async (lat: number, lng: number) => {
       setIsLoading(true)
       try {
-        const data = await fetchLocationDetails(lat, lng)
+        // Use OpenStreetMap's Nominatim API (free, no API key required)
+        const data = await reverseGeocode(lat, lng)
 
-        if (data && data.results && data.results.length > 0) {
-          const result = data.results[0]
-          const addressComponents = result.address_components
-
-          let newDistrict = "Current Location"
-          let newCity = "Unknown City"
-          let newCountry = "Unknown Country"
-
-          // Parse address components
-          for (const component of addressComponents) {
-            const types = component.types
-
-            if (types.includes("sublocality_level_1") || types.includes("neighborhood")) {
-              newDistrict = component.long_name
-            } else if (types.includes("locality")) {
-              newCity = component.long_name
-            } else if (types.includes("administrative_area_level_2") && newCity === "Unknown City") {
-              newCity = component.long_name
-            } else if (types.includes("country")) {
-              newCountry = component.long_name
-            }
-          }
+        if (data) {
+          const newDistrict = data.district || "Current Location"
+          const newCity = data.city || "Unknown City"
+          const newCountry = data.country || "Unknown Country"
 
           setDistrict(newDistrict)
           setCity(newCity)
@@ -83,7 +76,7 @@ export function LocationProvider({ children }: { children: ReactNode }) {
           throw new Error("No location data found")
         }
       } catch (e) {
-        console.error("Google Geocoding failed", e)
+        console.error("Geocoding failed", e)
         setError("Could not determine city name.")
         toast({
           title: "Location Error",

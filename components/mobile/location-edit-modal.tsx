@@ -1,12 +1,12 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useRef } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useLocation } from "@/contexts/location-context"
 import { Search, MapPin, Loader2, Navigation } from "lucide-react"
-import type { google } from "google-maps"
+import { quickSearch, reverseGeocode, type SearchResult } from "@/lib/osm-services"
 
 interface LocationEditModalProps {
   isOpen: boolean
@@ -16,69 +16,70 @@ interface LocationEditModalProps {
 export function LocationEditModal({ isOpen, onClose }: LocationEditModalProps) {
   const { requestLocation, setManualLocation } = useLocation()
   const [query, setQuery] = useState("")
-  const [suggestions, setSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([])
-  const [autocompleteService, setAutocompleteService] = useState<google.maps.places.AutocompleteService | null>(null)
-  const [placesService, setPlacesService] = useState<google.maps.places.PlacesService | null>(null)
+  const [suggestions, setSuggestions] = useState<SearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isSearching, setIsSearching] = useState(false)
+  const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  useEffect(() => {
-    if (window.google && window.google.maps && window.google.maps.places) {
-      setAutocompleteService(new window.google.maps.places.AutocompleteService())
-      setPlacesService(new window.google.maps.places.PlacesService(document.createElement("div")))
-    }
-  }, [isOpen])
-
-  const fetchSuggestions = useCallback(() => {
-    if (!autocompleteService || !query) {
+  const fetchSuggestions = useCallback(async () => {
+    if (!query.trim()) {
       setSuggestions([])
       return
     }
-    autocompleteService.getPlacePredictions(
-      { input: query, componentRestrictions: { country: "in" } }, // Restrict to India for relevance
-      (predictions, status) => {
-        if (status === "OK" && predictions) {
-          setSuggestions(predictions)
-        } else {
-          setSuggestions([])
-        }
-      },
-    )
-  }, [autocompleteService, query])
+
+    setIsSearching(true)
+    try {
+      const results = await quickSearch(query, undefined, undefined, 5)
+      setSuggestions(results)
+    } catch (error) {
+      console.error("Search error:", error)
+      setSuggestions([])
+    } finally {
+      setIsSearching(false)
+    }
+  }, [query])
 
   useEffect(() => {
-    const handler = setTimeout(() => {
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current)
+    }
+
+    searchTimeoutRef.current = setTimeout(() => {
       fetchSuggestions()
-    }, 300) // Debounce requests
-    return () => clearTimeout(handler)
+    }, 300)
+
+    return () => {
+      if (searchTimeoutRef.current) {
+        clearTimeout(searchTimeoutRef.current)
+      }
+    }
   }, [query, fetchSuggestions])
 
-  const handleSelectSuggestion = (placeId: string) => {
-    if (!placesService) return
+  const handleSelectSuggestion = async (result: SearchResult) => {
     setIsLoading(true)
-    placesService.getDetails({ placeId, fields: ["geometry", "address_components"] }, (place, status) => {
-      if (status === "OK" && place?.geometry?.location && place.address_components) {
-        const lat = place.geometry.location.lat()
-        const lng = place.geometry.location.lng()
+    try {
+      const locationDetails = await reverseGeocode(result.lat, result.lng)
 
-        const getAddressComponent = (type: string) =>
-          place.address_components?.find((c) => c.types.includes(type))?.long_name || ""
+      const district = locationDetails?.district || result.address?.suburb || "Selected Location"
+      const city = locationDetails?.city || result.address?.city || "Unknown City"
+      const country = locationDetails?.country || result.address?.country || "Unknown Country"
 
-        const district =
-          getAddressComponent("sublocality_level_1") ||
-          getAddressComponent("locality") ||
-          getAddressComponent("administrative_area_level_2") ||
-          "Selected Location"
-        const city =
-          getAddressComponent("locality") || getAddressComponent("administrative_area_level_2") || "Unknown City"
-        const country = getAddressComponent("country") || "Unknown Country"
+      setManualLocation({
+        lat: result.lat,
+        lng: result.lng,
+        district,
+        city,
+        country,
+      })
 
-        setManualLocation({ lat, lng, district, city, country })
-        setQuery("")
-        setSuggestions([])
-        onClose()
-      }
+      setQuery("")
+      setSuggestions([])
+      onClose()
+    } catch (error) {
+      console.error("Error selecting location:", error)
+    } finally {
       setIsLoading(false)
-    })
+    }
   }
 
   const handleUseCurrentLocation = () => {
@@ -105,26 +106,34 @@ export function LocationEditModal({ isOpen, onClose }: LocationEditModalProps) {
           />
         </div>
         <div className="space-y-2 max-h-60 overflow-y-auto">
-          {isLoading ? (
+          {isLoading || isSearching ? (
             <div className="flex items-center justify-center p-4">
               <Loader2 className="h-6 w-6 animate-spin" />
-              <span className="ml-2 text-sm text-muted-foreground">Updating location data...</span>
+              <span className="ml-2 text-sm text-muted-foreground">
+                {isLoading ? "Updating location data..." : "Searching..."}
+              </span>
             </div>
-          ) : (
+          ) : suggestions.length > 0 ? (
             suggestions.map((suggestion) => (
               <button
-                key={suggestion.place_id}
-                onClick={() => handleSelectSuggestion(suggestion.place_id)}
+                key={suggestion.placeId}
+                onClick={() => handleSelectSuggestion(suggestion)}
                 className="w-full text-left p-2 rounded-md hover:bg-accent flex items-start gap-3 transition-colors"
               >
                 <MapPin className="h-4 w-4 mt-1 flex-shrink-0 text-muted-foreground" />
                 <div>
-                  <p className="font-medium text-sm">{suggestion.structured_formatting.main_text}</p>
-                  <p className="text-xs text-muted-foreground">{suggestion.structured_formatting.secondary_text}</p>
+                  <p className="font-medium text-sm">{suggestion.displayName.split(",")[0]}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {suggestion.displayName.split(",").slice(1, 3).join(",")}
+                  </p>
                 </div>
               </button>
             ))
-          )}
+          ) : query.trim() ? (
+            <div className="text-center p-4 text-sm text-muted-foreground">
+              No locations found. Try a different search term.
+            </div>
+          ) : null}
         </div>
         <Button variant="outline" onClick={handleUseCurrentLocation} className="w-full bg-transparent">
           <Navigation className="mr-2 h-4 w-4" />

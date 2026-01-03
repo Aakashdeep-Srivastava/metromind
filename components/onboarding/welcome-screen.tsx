@@ -51,7 +51,7 @@ export default function WelcomeScreen({ onGetStarted }: WelcomeScreenProps) {
           transition={{ duration: 0.5, delay: 0.5 }}
           className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
         >
-          Welcome to XphoraPulse
+          Welcome to MetroMind
         </motion.h1>
 
         <motion.p

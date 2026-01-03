@@ -44,8 +44,8 @@ export interface ReportFilter {
 }
 
 class ReportStorageService {
-  private readonly STORAGE_KEY = 'xphora_reports';
-  private readonly USER_KEY = 'xphora_user';
+  private readonly STORAGE_KEY = 'metromind_reports';
+  private readonly USER_KEY = 'metromind_user';
 
   // User management
   getCurrentUser(): { id: string; name: string; email?: string; avatar?: string } | null {

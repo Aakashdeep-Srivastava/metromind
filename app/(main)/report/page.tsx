@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Badge } from "@/components/ui/badge"
 import { useLocation } from "@/contexts/location-context"
-import { CityMap } from "@/components/maps/city-map"
+import { OSMMap } from "@/components/maps/osm-map"
 import { 
   Loader2, 
   CheckCircle, 
@@ -74,7 +74,7 @@ const getCurrentUser = () => {
   if (typeof window === 'undefined') return null
   
   try {
-    const userData = localStorage.getItem('xphora_user')
+    const userData = localStorage.getItem('metromind_user')
     if (userData) {
       return JSON.parse(userData)
     }
@@ -85,7 +85,7 @@ const getCurrentUser = () => {
       name: `Citizen ${Math.floor(Math.random() * 1000)}`,
       email: undefined
     }
-    localStorage.setItem('xphora_user', JSON.stringify(anonymousUser))
+    localStorage.setItem('metromind_user', JSON.stringify(anonymousUser))
     return anonymousUser
   } catch (error) {
     console.error('Error managing user:', error)
@@ -107,7 +107,7 @@ const saveReport = (reportData: Omit<UserReport, 'id' | 'timestamp' | 'views' | 
     }
 
     reports.unshift(newReport) // Add to beginning (newest first)
-    localStorage.setItem('xphora_reports', JSON.stringify(reports))
+    localStorage.setItem('metromind_reports', JSON.stringify(reports))
     
     console.log('Report saved successfully:', newReport.id)
     return newReport.id
@@ -119,7 +119,7 @@ const saveReport = (reportData: Omit<UserReport, 'id' | 'timestamp' | 'views' | 
 
 const getStoredReports = (): UserReport[] => {
   try {
-    const reportsData = localStorage.getItem('xphora_reports')
+    const reportsData = localStorage.getItem('metromind_reports')
     if (!reportsData) return []
     
     const reports = JSON.parse(reportsData)
@@ -266,7 +266,7 @@ export default function ReportPage() {
         reports[reportIndex].views = Math.floor(Math.random() * 50) + 10
         reports[reportIndex].helpfulVotes = Math.floor(Math.random() * 20) + 5
         if (index === 2) reports[reportIndex].status = 'verified' // Mark pothole as verified
-        localStorage.setItem('xphora_reports', JSON.stringify(reports))
+        localStorage.setItem('metromind_reports', JSON.stringify(reports))
       }
     })
   }
@@ -917,7 +917,7 @@ export default function ReportPage() {
           </CardHeader>
           <CardContent>
             <div className="aspect-video rounded-lg overflow-hidden border">
-              <CityMap />
+              <OSMMap initialCenter={coords} initialZoom={15} />
             </div>
           </CardContent>
         </Card>

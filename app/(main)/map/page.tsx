@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { CityMap } from "@/components/maps/city-map"
+import { OSMMap } from "@/components/maps/osm-map"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -39,7 +39,7 @@ export default function MapPage() {
 
   return (
     <div className="relative h-[calc(100vh-4rem)] pb-16">
-      <CityMap fullscreen />
+      <OSMMap fullscreen showSearch showReports />
 
       {/* Layer Controls */}
       <div className="absolute top-4 left-4 z-10 space-y-2">

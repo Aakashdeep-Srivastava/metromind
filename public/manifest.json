@@ -1,6 +1,6 @@
 {
-  "name": "XphoraPulse - Live City Intelligence",
-  "short_name": "XphoraPulse",
+  "name": "MetroMind - Live City Intelligence",
+  "short_name": "MetroMind",
   "description": "Real-time city intelligence for Bengaluru citizens",
   "start_url": "/",
   "display": "standalone",

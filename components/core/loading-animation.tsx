@@ -5,7 +5,7 @@ import { motion, useMotionValue, useTransform, animate } from "framer-motion"
 import { useEffect } from "react"
 
 const TypingText = () => {
-  const text = "XphoraPulse"
+  const text = "MetroMind"
   const count = useMotionValue(0)
   const rounded = useTransform(count, (latest) => Math.round(latest))
   const displayText = useTransform(rounded, (latest) => text.slice(0, latest))

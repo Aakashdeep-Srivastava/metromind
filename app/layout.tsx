@@ -3,22 +3,14 @@ import type { Metadata, Viewport } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
+import { ClerkProvider } from "@clerk/nextjs"
 import { AuthProvider } from "@/contexts/auth-context"
 import { Toaster } from "@/components/ui/toaster"
 import { LocationProvider } from "@/contexts/location-context"
-import { config, validateConfig } from "@/lib/config"
+import { config } from "@/lib/config"
 import { ErrorBoundary } from "@/components/error-boundary"
 
 const inter = Inter({ subsets: ["latin"] })
-
-// Validate configuration on app start (server-side only)
-if (typeof window === "undefined") {
-  try {
-    validateConfig()
-  } catch (error) {
-    console.error("Configuration validation failed:", error)
-  }
-}
 
 export const metadata: Metadata = {
   title: {
@@ -27,9 +19,9 @@ export const metadata: Metadata = {
   },
   description: config.app.description,
   keywords: ["city intelligence", "bengaluru", "real-time", "traffic", "weather", "incidents"],
-  authors: [{ name: "XphoraPulse Team" }],
-  creator: "XphoraPulse",
-  publisher: "XphoraPulse",
+  authors: [{ name: "MetroMind Team" }],
+  creator: "MetroMind",
+  publisher: "MetroMind",
   formatDetection: {
     email: false,
     address: false,
@@ -96,14 +88,16 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </head>
       <body className={cn("bg-background font-sans antialiased", inter.className)}>
-        <ErrorBoundary>
-          <LocationProvider>
-            <AuthProvider>
-              {children}
-              <Toaster />
-            </AuthProvider>
-          </LocationProvider>
-        </ErrorBoundary>
+        <ClerkProvider>
+          <ErrorBoundary>
+            <LocationProvider>
+              <AuthProvider>
+                {children}
+                <Toaster />
+              </AuthProvider>
+            </LocationProvider>
+          </ErrorBoundary>
+        </ClerkProvider>
       </body>
     </html>
   )

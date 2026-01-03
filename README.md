@@ -1,4 +1,4 @@
-# 🌆 XphoraPulse
+# 🌆 MetroMind
 ### *Live City Intelligence for Bengaluru Citizens*
 
 <div align="center">
@@ -12,18 +12,18 @@
 
 *Real-time city intelligence powered by coordinated AI agents*
 
-[🚀 Live Demo](https://xphorapulse.vercel.app) • [📱 Install PWA](https://xphorapulse.vercel.app) • [📖 Documentation](#documentation)
+[🚀 Live Demo](https://metromind.vercel.app) • [📱 Install PWA](https://metromind.vercel.app) • [📖 Documentation](#documentation)
 
 </div>
 
 ---
 
-## ✨ What is XphoraPulse?
+## ✨ What is MetroMind?
 
-XphoraPulse transforms how citizens interact with their city by providing **real-time intelligence** through coordinated AI agents. Experience Bengaluru's living pulse through an intuitive mobile-first Progressive Web App that aggregates, analyzes, and visualizes city data in real-time.
+MetroMind transforms how citizens interact with their city by providing **real-time intelligence** through coordinated AI agents. Experience Bengaluru's living pulse through an intuitive mobile-first Progressive Web App that aggregates, analyzes, and visualizes city data in real-time.
 
 ### 🎯 Core Vision
-> *"Every citizen deserves to feel the pulse of their city - from traffic patterns to air quality, from social sentiment to emergency alerts. XphoraPulse makes city intelligence accessible, actionable, and beautiful."*
+> *"Every citizen deserves to feel the pulse of their city - from traffic patterns to air quality, from social sentiment to emergency alerts. MetroMind makes city intelligence accessible, actionable, and beautiful."*
 
 ---
 
@@ -42,10 +42,10 @@ XphoraPulse transforms how citizens interact with their city by providing **real
 - **Smart Categorization**: Automatic incident classification and priority
 
 ### 🗺️ **Interactive City Mapping**
+- **OpenStreetMap Integration**: Free, open-source mapping
 - **Live Heat Maps**: Traffic, air quality, and incident density
 - **Geo-tagged Reports**: Precise location-based incident reporting
 - **Dynamic Layers**: Toggle between different city metrics
-- **Smart Navigation**: AI-suggested optimal routes
 
 ### 📊 **Real-time Data Dashboard**
 - **Live Metrics**: Weather, AQI, traffic, social sentiment
@@ -68,21 +68,21 @@ XphoraPulse transforms how citizens interact with their city by providing **real
 Next.js 15 + TypeScript + Tailwind CSS
 ├── 📱 Progressive Web App (PWA)
 ├── 🎨 shadcn/ui Components
-├── 🗺️ Google Maps Integration
+├── 🗺️ OpenStreetMap + Leaflet
 ├── 📸 Camera & Media APIs
 ├── 🔔 Push Notifications
 └── ⚡ Optimized Performance
 ```
 
-### **☁️ Backend - Firebase + Google Cloud**
+### **☁️ Backend - Clerk Auth + Cloud Services**
 ```
-Firebase + Google Cloud Functions
-├── 🔐 Firebase Authentication
-├── 💾 Firestore Database
+Clerk Authentication + Cloud Functions
+├── 🔐 Clerk Authentication
+├── 💾 Local Storage / Cloud DB
 ├── 📁 Cloud Storage
-├── 🤖 Vertex AI & Gemini
-├── 📍 Google Maps APIs
-└── 🔔 Cloud Messaging
+├── 🤖 Gemini AI
+├── 📍 OpenStreetMap APIs
+└── 🔔 Notifications
 ```
 
 ### **🤖 AI Agent System**
@@ -102,7 +102,7 @@ Coordinated Multi-Agent Architecture
 ### **📱 For Citizens (Users)**
 
 **Option 1: Install PWA (Recommended)**
-1. Visit [xphorapulse.vercel.app](https://xphorapulse.vercel.app) on your mobile device
+1. Visit [metromind.vercel.app](https://metromind.vercel.app) on your mobile device
 2. Tap the "Install" button or "Add to Home Screen"
 3. Launch from your home screen like any native app!
 
@@ -114,17 +114,20 @@ Coordinated Multi-Agent Architecture
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-org/xphorapulse.git
-cd xphorapulse
+git clone https://github.com/Aakashdeep-Srivastava/metromind.git
+cd metromind
 
-# 2. Quick setup (automated)
-chmod +x scripts/setup.sh
-./scripts/setup.sh
+# 2. Install dependencies
+pnpm install
 
-# 3. Start development
-npm run dev
+# 3. Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Clerk keys
 
-# 4. Visit your local app
+# 4. Start development
+pnpm dev
+
+# 5. Visit your local app
 open http://localhost:3000
 ```
 
@@ -133,69 +136,42 @@ open http://localhost:3000
 ## 🛠️ Installation & Setup
 
 ### **Prerequisites**
-- Node.js 18+ and npm 8+
-- Google Cloud Platform account
-- Firebase project
+- Node.js 18+ and pnpm
+- Clerk account (for authentication)
 - Modern web browser
 
 ### **API Keys Required**
-- 🗺️ Google Maps JavaScript API
-- 🤖 Google Gemini AI API
-- 🔥 Firebase Configuration
-- 📍 Google Geocoding API
-- 🌦️ Weather API (optional)
+- 🔐 Clerk Authentication Keys
+- 🤖 Google Gemini AI API (optional)
+- 🗺️ OpenStreetMap (free, no key required)
 
-### **Detailed Setup**
+### **Environment Configuration**
 
-<details>
-<summary><strong>🔧 Environment Configuration</strong></summary>
-
-Create `.env.local` in the frontend directory:
+Create `.env.local` in the project directory:
 
 ```bash
-# Google APIs
-NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_maps_api_key
-NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
-
-# Firebase Configuration
-NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+# Clerk Authentication (Required)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
+CLERK_SECRET_KEY=sk_test_...
 
 # Optional APIs
-NEXT_PUBLIC_WEATHER_API_KEY=your_weather_api_key
-NEXT_PUBLIC_ENABLE_ANALYTICS=true
+NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+
+# App Config
+NEXT_PUBLIC_APP_NAME=MetroMind
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-</details>
-
-<details>
-<summary><strong>🚀 Development Commands</strong></summary>
+### **Development Commands**
 
 ```bash
 # Development
-npm run dev              # Start development server
-npm run build            # Build for production
-npm run start            # Start production server
-npm run lint             # Run ESLint
-npm run type-check       # TypeScript checking
-
-# Firebase
-firebase login           # Authenticate with Firebase
-firebase init            # Initialize Firebase project
-firebase deploy          # Deploy to Firebase
-firebase serve           # Local Firebase emulator
-
-# Testing
-npm run test             # Run tests
-npm run test:watch       # Watch mode
-npm run test:coverage    # Coverage report
+pnpm dev              # Start development server
+pnpm build            # Build for production
+pnpm start            # Start production server
+pnpm lint             # Run ESLint
+pnpm type-check       # TypeScript checking
 ```
-
-</details>
 
 ---
 
@@ -267,91 +243,6 @@ graph TD
 
 ---
 
-## 🎯 Use Cases & User Journeys
-
-### **👤 Daily Commuter**
-```
-Morning Routine:
-1. Check XphoraPulse for traffic conditions
-2. Receive AI-recommended optimal route
-3. Get real-time updates during commute
-4. Report any incidents encountered
-```
-
-### **🏛️ City Administrator**
-```
-Incident Management:
-1. Monitor real-time incident dashboard
-2. Receive high-priority alerts
-3. Coordinate response using location data
-4. Track resolution and community feedback
-```
-
-### **👥 Community Member**
-```
-Civic Engagement:
-1. Report local issues with photos
-2. Track resolution status
-3. Receive neighborhood-specific alerts
-4. Contribute to community safety
-```
-
----
-
-## 🌐 API Documentation
-
-### **Core Endpoints**
-
-<details>
-<summary><strong>📍 Location & Mapping</strong></summary>
-
-```typescript
-// Get current city pulse data
-GET /api/pulse?lat={lat}&lng={lng}&radius={radius}
-
-// Submit incident report
-POST /api/incidents
-{
-  "location": { "lat": 12.9716, "lng": 77.5946 },
-  "category": "traffic",
-  "description": "Heavy traffic jam",
-  "media": ["image_url"],
-  "severity": "medium"
-}
-
-// Get nearby incidents
-GET /api/incidents?lat={lat}&lng={lng}&radius={radius}&category={category}
-```
-
-</details>
-
-<details>
-<summary><strong>🤖 AI Processing</strong></summary>
-
-```typescript
-// Analyze image with AI
-POST /api/ai/analyze-image
-{
-  "image": "base64_encoded_image",
-  "location": { "lat": 12.9716, "lng": 77.5946 },
-  "context": "traffic_incident"
-}
-
-// Get AI recommendations
-GET /api/ai/recommendations?user_id={id}&location={lat,lng}
-
-// Process natural language report
-POST /api/ai/process-text
-{
-  "text": "Heavy traffic near Silk Board",
-  "location": { "lat": 12.9716, "lng": 77.5946 }
-}
-```
-
-</details>
-
----
-
 ## 🔒 Privacy & Security
 
 ### **🛡️ Data Protection**
@@ -361,7 +252,7 @@ POST /api/ai/process-text
 - **GDPR Compliant**: Right to delete and data portability
 
 ### **🔐 Security Measures**
-- **Authentication**: Firebase Auth with Google OAuth
+- **Authentication**: Clerk Auth with Google OAuth
 - **API Security**: Rate limiting and key validation
 - **Content Security Policy**: XSS and injection protection
 - **Secure Headers**: HTTPS enforcement and security headers
@@ -374,43 +265,9 @@ POST /api/ai/process-text
 
 ```bash
 # Frontend (Vercel)
-npm run build
+pnpm build
 vercel deploy --prod
-
-# Backend (Firebase)
-firebase deploy --only functions,database,storage
-
-# Full deployment
-npm run deploy
 ```
-
-### **🔧 Environment Setup**
-
-**Staging Environment**
-- Automatic deployment from `develop` branch
-- Integrated testing and validation
-- Preview URLs for feature testing
-
-**Production Environment**
-- Manual deployment from `main` branch
-- Performance monitoring and alerting
-- Automatic backups and rollback capability
-
----
-
-## 📊 Performance & Monitoring
-
-### **📈 Key Metrics**
-- **Response Time**: < 200ms API responses
-- **Uptime**: 99.9% availability target
-- **User Engagement**: Daily active users and session duration
-- **Error Rate**: < 0.1% error rate target
-
-### **🔍 Monitoring Stack**
-- **Application Monitoring**: Firebase Analytics
-- **Performance Monitoring**: Lighthouse CI
-- **Error Tracking**: Sentry integration
-- **Real User Monitoring**: Core Web Vitals tracking
 
 ---
 
@@ -418,29 +275,17 @@ npm run deploy
 
 We welcome contributions! Here's how to get started:
 
-### **🐛 Bug Reports**
-1. Check existing issues first
-2. Use the bug report template
-3. Include steps to reproduce
-4. Add screenshots if applicable
-
-### **✨ Feature Requests**
-1. Discuss in GitHub Discussions first
-2. Follow the feature request template
-3. Explain the use case and benefit
-4. Consider implementation complexity
-
 ### **💻 Code Contributions**
 ```bash
 # 1. Fork and clone
-git clone https://github.com/your-username/xphorapulse.git
+git clone https://github.com/your-username/metromind.git
 
 # 2. Create feature branch
 git checkout -b feature/amazing-feature
 
 # 3. Make changes and test
-npm run test
-npm run lint
+pnpm lint
+pnpm type-check
 
 # 4. Commit with conventional commits
 git commit -m "feat: add amazing feature"
@@ -451,27 +296,16 @@ git push origin feature/amazing-feature
 
 ---
 
-## 🎉 Acknowledgments
+## 🛠️ Built With
 
-### **🏆 Awards & Recognition**
-- 🥇 **Winner** - Google Agentic AI Day Hackathon 2025
-- 🌟 **Best PWA** - Mobile Web Innovation Awards
-- 🏙️ **Smart City Innovation** - Urban Tech Summit
-
-### **🙏 Special Thanks**
-- **Google Cloud Team** for providing AI/ML infrastructure
-- **Bengaluru Citizens** for testing and feedback
-- **Open Source Community** for amazing tools and libraries
-- **Firebase Team** for excellent backend services
-
-### **🛠️ Built With**
 - [Next.js](https://nextjs.org/) - React framework
 - [TypeScript](https://www.typescriptlang.org/) - Type safety
 - [Tailwind CSS](https://tailwindcss.com/) - Styling
 - [shadcn/ui](https://ui.shadcn.com/) - UI components
-- [Firebase](https://firebase.google.com/) - Backend services
+- [Clerk](https://clerk.com/) - Authentication
+- [OpenStreetMap](https://www.openstreetmap.org/) - Free mapping
+- [Leaflet](https://leafletjs.com/) - Interactive maps
 - [Google Gemini](https://ai.google.dev/) - AI/ML capabilities
-- [Google Maps](https://developers.google.com/maps) - Mapping services
 
 ---
 
@@ -484,16 +318,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 ## 📞 Support & Contact
 
 ### **🆘 Getting Help**
-- 📖 **Documentation**: [docs.xphorapulse.com](https://docs.xphorapulse.com)
-- 💬 **Community**: [GitHub Discussions](https://github.com/your-org/xphorapulse/discussions)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/xphorapulse/issues)
-- 📧 **Email**: support@xphorapulse.com
-
-### **🌐 Links**
-- **Website**: [xphorapulse.com](https://xphorapulse.com)
-- **PWA**: [app.xphorapulse.com](https://app.xphorapulse.com)
-- **Status**: [status.xphorapulse.com](https://status.xphorapulse.com)
-- **Blog**: [blog.xphorapulse.com](https://blog.xphorapulse.com)
+- 💬 **Community**: [GitHub Discussions](https://github.com/Aakashdeep-Srivastava/metromind/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/Aakashdeep-Srivastava/metromind/issues)
 
 ---
 
@@ -503,7 +329,6 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 *Bringing AI-powered city intelligence to your fingertips*
 
-[![Follow on Twitter](https://img.shields.io/twitter/follow/xphorapulse?style=social)](https://twitter.com/xphorapulse)
-[![Star on GitHub](https://img.shields.io/github/stars/your-org/xphorapulse?style=social)](https://github.com/your-org/xphorapulse)
+[![Star on GitHub](https://img.shields.io/github/stars/Aakashdeep-Srivastava/metromind?style=social)](https://github.com/Aakashdeep-Srivastava/metromind)
 
 </div>

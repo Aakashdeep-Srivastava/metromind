@@ -16,7 +16,7 @@ import {
   MapPin,
   Zap,
 } from "lucide-react"
-import { CityMap } from "@/components/maps/city-map"
+import { OSMMap } from "@/components/maps/osm-map"
 import { useLiveData } from "@/hooks/use-live-data"
 import { useLocation } from "@/contexts/location-context"
 import { cn } from "@/lib/utils"
@@ -143,7 +143,7 @@ export default function DashboardPage() {
     <div className="pb-16">
       {/* Compact Map Section */}
       <div className="relative h-64">
-        <CityMap initialCenter={coords || undefined} />
+        <OSMMap initialCenter={coords || undefined} />
 
         {/* Live Status Indicator */}
         <div className="absolute top-2 left-2 z-10">

@@ -137,7 +137,7 @@ export function CityMap({
   const getStoredReports = useCallback((): UserReport[] => {
     if (typeof window === 'undefined') return []
     try {
-      const stored = localStorage.getItem('xphora_reports')
+      const stored = localStorage.getItem('metromind_reports')
       if (stored) {
         const parsed = JSON.parse(stored)
         return parsed.map((report: any) => ({
@@ -426,7 +426,7 @@ export function CityMap({
       const reportIndex = reports.findIndex(r => r.id === reportId)
       if (reportIndex !== -1) {
         reports[reportIndex].views += 1
-        localStorage.setItem('xphora_reports', JSON.stringify(reports))
+        localStorage.setItem('metromind_reports', JSON.stringify(reports))
       }
     } catch (error) {
       console.error('Error incrementing views:', error)
@@ -440,7 +440,7 @@ export function CityMap({
       const reportIndex = reports.findIndex(r => r.id === reportId)
       if (reportIndex !== -1) {
         reports[reportIndex].helpfulVotes += 1
-        localStorage.setItem('xphora_reports', JSON.stringify(reports))
+        localStorage.setItem('metromind_reports', JSON.stringify(reports))
         
         // Refresh info window if it's the selected report
         const marker = reportMarkersRef.current.find(m => m.getTitle() === reports[reportIndex].analysis.aiTitle)

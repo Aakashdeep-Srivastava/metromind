@@ -88,7 +88,7 @@ export async function fetchWeatherData(lat: number, lng: number): Promise<Weathe
       {
         headers: {
           Accept: "application/json",
-          "User-Agent": "XphoraPulse/1.0",
+          "User-Agent": "MetroMind/1.0",
         },
         signal: controller.signal,
         // Remove Next.js caching to avoid conflicts
@@ -163,7 +163,7 @@ export async function fetchAirQualityData(lat: number, lng: number): Promise<Air
     const response = await fetch(`${config.endpoints.weather}/air_pollution?lat=${lat}&lon=${lng}&appid=${API_KEY}`, {
       headers: {
         Accept: "application/json",
-        "User-Agent": "XphoraPulse/1.0",
+        "User-Agent": "MetroMind/1.0",
       },
       signal: controller.signal,
     })
