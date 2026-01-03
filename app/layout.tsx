@@ -10,6 +10,7 @@ import { LocationProvider } from "@/contexts/location-context"
 import { config } from "@/lib/config"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { ThemeProvider } from "@/components/theme-provider"
+import { QueryProvider } from "@/providers/query-provider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -97,12 +98,14 @@ export default function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
-              <LocationProvider>
-                <AuthProvider>
-                  {children}
-                  <Toaster />
-                </AuthProvider>
-              </LocationProvider>
+              <QueryProvider>
+                <LocationProvider>
+                  <AuthProvider>
+                    {children}
+                    <Toaster />
+                  </AuthProvider>
+                </LocationProvider>
+              </QueryProvider>
             </ThemeProvider>
           </ErrorBoundary>
         </ClerkProvider>

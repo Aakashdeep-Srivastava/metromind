@@ -16,7 +16,9 @@
       "Bash(git commit:*)",
       "Bash(gh --version:*)",
       "Bash(ls:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "Bash(git reset:*)",
+      "Bash(npm run build:*)"
     ]
   }
 }
