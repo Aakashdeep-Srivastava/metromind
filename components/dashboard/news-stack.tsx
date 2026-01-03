@@ -1,7 +1,6 @@
 "use client"
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
 import {
   Car,
   Cloud,
@@ -12,7 +11,8 @@ import {
   Clock,
   ChevronRight,
   Zap,
-  TrendingUp
+  TrendingUp,
+  Radio
 } from 'lucide-react'
 import type { NewsItem } from '@/stores/app-store'
 import { cn } from '@/lib/utils'
@@ -25,64 +25,39 @@ interface NewsStackProps {
 const categoryConfig = {
   traffic: {
     icon: Car,
-    gradient: 'from-orange-500 via-red-500 to-pink-500',
-    bgGradient: 'from-orange-500/10 to-red-500/10',
-    borderColor: 'border-orange-500/30',
-    glowColor: 'shadow-orange-500/20',
+    color: 'text-orange-400',
+    bg: 'bg-orange-500/20',
+    border: 'border-orange-500/30',
   },
   weather: {
     icon: Cloud,
-    gradient: 'from-blue-500 via-cyan-500 to-teal-500',
-    bgGradient: 'from-blue-500/10 to-cyan-500/10',
-    borderColor: 'border-blue-500/30',
-    glowColor: 'shadow-blue-500/20',
+    color: 'text-cyan-400',
+    bg: 'bg-cyan-500/20',
+    border: 'border-cyan-500/30',
   },
   local: {
     icon: MapPin,
-    gradient: 'from-green-500 via-emerald-500 to-teal-500',
-    bgGradient: 'from-green-500/10 to-emerald-500/10',
-    borderColor: 'border-green-500/30',
-    glowColor: 'shadow-green-500/20',
+    color: 'text-emerald-400',
+    bg: 'bg-emerald-500/20',
+    border: 'border-emerald-500/30',
   },
   emergency: {
     icon: AlertTriangle,
-    gradient: 'from-red-500 via-rose-500 to-pink-500',
-    bgGradient: 'from-red-500/10 to-rose-500/10',
-    borderColor: 'border-red-500/30',
-    glowColor: 'shadow-red-500/20',
+    color: 'text-rose-400',
+    bg: 'bg-rose-500/20',
+    border: 'border-rose-500/30',
   },
   events: {
     icon: Calendar,
-    gradient: 'from-purple-500 via-violet-500 to-indigo-500',
-    bgGradient: 'from-purple-500/10 to-violet-500/10',
-    borderColor: 'border-purple-500/30',
-    glowColor: 'shadow-purple-500/20',
+    color: 'text-violet-400',
+    bg: 'bg-violet-500/20',
+    border: 'border-violet-500/30',
   },
   general: {
     icon: Newspaper,
-    gradient: 'from-gray-500 via-slate-500 to-zinc-500',
-    bgGradient: 'from-gray-500/10 to-slate-500/10',
-    borderColor: 'border-gray-500/30',
-    glowColor: 'shadow-gray-500/20',
-  },
-}
-
-const priorityConfig = {
-  urgent: {
-    badge: 'bg-red-500 text-white animate-pulse',
-    ring: 'ring-2 ring-red-500/50',
-  },
-  high: {
-    badge: 'bg-orange-500 text-white',
-    ring: 'ring-1 ring-orange-500/30',
-  },
-  medium: {
-    badge: 'bg-yellow-500 text-black',
-    ring: '',
-  },
-  low: {
-    badge: 'bg-gray-500 text-white',
-    ring: '',
+    color: 'text-slate-400',
+    bg: 'bg-slate-500/20',
+    border: 'border-slate-500/30',
   },
 }
 
@@ -94,9 +69,9 @@ function formatTimeAgo(date: Date): string {
   const diffDays = Math.floor(diffHours / 24)
 
   if (diffMins < 1) return 'Just now'
-  if (diffMins < 60) return `${diffMins}m ago`
-  if (diffHours < 24) return `${diffHours}h ago`
-  return `${diffDays}d ago`
+  if (diffMins < 60) return `${diffMins}m`
+  if (diffHours < 24) return `${diffHours}h`
+  return `${diffDays}d`
 }
 
 function NewsCard({ item, index, onClick }: {
@@ -105,128 +80,80 @@ function NewsCard({ item, index, onClick }: {
   onClick?: () => void
 }) {
   const config = categoryConfig[item.category]
-  const priority = priorityConfig[item.priority]
   const Icon = config.icon
+  const isUrgent = item.priority === 'urgent'
+  const isHigh = item.priority === 'high'
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -20, scale: 0.95 }}
-      transition={{
-        duration: 0.3,
-        delay: index * 0.05,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }}
-      whileHover={{ scale: 1.02, y: -2 }}
+    <motion.button
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      transition={{ duration: 0.2, delay: index * 0.03 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       className={cn(
-        "relative overflow-hidden rounded-2xl cursor-pointer",
-        "bg-gradient-to-br backdrop-blur-xl",
-        config.bgGradient,
-        "border",
-        config.borderColor,
-        priority.ring,
-        "shadow-lg",
-        config.glowColor,
-        "transition-all duration-300"
+        "w-full text-left",
+        "p-3 rounded-xl",
+        "bg-slate-800/50 border border-slate-700/50",
+        "hover:bg-slate-800/70",
+        "transition-all duration-200",
+        isUrgent && "border-rose-500/50 bg-rose-500/10"
       )}
     >
-      {/* Animated background gradient */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="flex items-start gap-3">
+        {/* Category Icon */}
         <div className={cn(
-          "absolute inset-0 bg-gradient-to-r",
-          config.gradient,
-          "animate-gradient-x"
-        )} />
-      </div>
+          "flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center",
+          config.bg
+        )}>
+          <Icon className={cn("w-4 h-4", config.color)} />
+        </div>
 
-      {/* Glass effect overlay */}
-      <div className="absolute inset-0 bg-white/5 dark:bg-black/20" />
-
-      {/* Content */}
-      <div className="relative p-4">
-        <div className="flex items-start gap-3">
-          {/* Category Icon */}
-          <div className={cn(
-            "flex-shrink-0 w-10 h-10 rounded-xl",
-            "bg-gradient-to-br",
-            config.gradient,
-            "flex items-center justify-center",
-            "shadow-lg",
-            config.glowColor
-          )}>
-            <Icon className="w-5 h-5 text-white" />
-          </div>
-
-          {/* Text Content */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              {item.priority === 'urgent' && (
-                <span className={cn(
-                  "px-2 py-0.5 text-[10px] font-bold rounded-full uppercase",
-                  priority.badge
-                )}>
-                  Urgent
-                </span>
-              )}
-              {item.priority === 'high' && (
-                <Zap className="w-3 h-3 text-orange-500" />
-              )}
-            </div>
-
-            <h3 className="text-sm font-semibold text-foreground line-clamp-1 mb-1">
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          {/* Title row */}
+          <div className="flex items-start gap-2">
+            <h3 className="text-sm font-medium text-white line-clamp-1 flex-1">
               {item.title}
             </h3>
-
-            <p className="text-xs text-muted-foreground line-clamp-1">
-              {item.description}
-            </p>
-
-            {/* Meta info */}
-            <div className="flex items-center gap-3 mt-2">
-              <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                <Clock className="w-3 h-3" />
-                {formatTimeAgo(item.timestamp)}
+            {isUrgent && (
+              <span className="flex-shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-rose-500 text-white">
+                Urgent
               </span>
-              <span className="text-[10px] text-muted-foreground">
-                {item.source}
-              </span>
-              {item.location && (
-                <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-                  <MapPin className="w-3 h-3" />
-                  {item.location}
-                </span>
-              )}
-            </div>
+            )}
+            {isHigh && !isUrgent && (
+              <Zap className="w-3 h-3 text-orange-400 flex-shrink-0" />
+            )}
           </div>
 
-          {/* Arrow */}
-          <ChevronRight className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-        </div>
-      </div>
+          {/* Description */}
+          <p className="text-xs text-slate-500 line-clamp-1 mt-0.5">
+            {item.description}
+          </p>
 
-      {/* Shimmer effect */}
-      <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/5 to-transparent" />
-    </motion.div>
+          {/* Meta */}
+          <div className="flex items-center gap-2 mt-1.5">
+            <span className="flex items-center gap-1 text-[10px] text-slate-600">
+              <Clock className="w-2.5 h-2.5" />
+              {formatTimeAgo(item.timestamp)}
+            </span>
+            <span className="text-[10px] text-slate-600">
+              {item.source}
+            </span>
+          </div>
+        </div>
+
+        {/* Arrow */}
+        <ChevronRight className="w-4 h-4 text-slate-600 flex-shrink-0 mt-2" />
+      </div>
+    </motion.button>
   )
 }
 
 export function NewsStack({ news, onItemClick }: NewsStackProps) {
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
-
-  // Group news by category
-  const groupedNews = news.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = []
-    }
-    acc[item.category].push(item)
-    return acc
-  }, {} as Record<string, NewsItem[]>)
-
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       <AnimatePresence mode="popLayout">
         {news.slice(0, 10).map((item, index) => (
           <NewsCard
@@ -252,7 +179,7 @@ export function NewsCategoryTabs({
   counts: Record<string, number>
 }) {
   const categories = [
-    { id: 'all', label: 'All', icon: TrendingUp },
+    { id: 'all', label: 'All', icon: Radio },
     { id: 'traffic', label: 'Traffic', icon: Car },
     { id: 'weather', label: 'Weather', icon: Cloud },
     { id: 'local', label: 'Local', icon: MapPin },
@@ -261,7 +188,7 @@ export function NewsCategoryTabs({
   ]
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+    <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
       {categories.map((cat) => {
         const isActive = activeCategory === cat.id
         const config = cat.id !== 'all' ? categoryConfig[cat.id as keyof typeof categoryConfig] : null
@@ -271,25 +198,21 @@ export function NewsCategoryTabs({
           <motion.button
             key={cat.id}
             onClick={() => onCategoryChange(cat.id)}
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className={cn(
               "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium",
               "transition-all duration-200 whitespace-nowrap",
               isActive
-                ? cn(
-                    "bg-gradient-to-r text-white shadow-lg",
-                    config?.gradient || "from-primary to-primary/80"
-                  )
-                : "bg-muted/50 text-muted-foreground hover:bg-muted"
+                ? "bg-cyan-500 text-white"
+                : "bg-slate-800/50 text-slate-500 hover:text-slate-300 border border-slate-700/50"
             )}
           >
             <Icon className="w-3.5 h-3.5" />
             {cat.label}
             {counts[cat.id] > 0 && (
               <span className={cn(
-                "ml-1 px-1.5 py-0.5 rounded-full text-[10px]",
-                isActive ? "bg-white/20" : "bg-muted-foreground/20"
+                "px-1.5 py-0.5 rounded-full text-[9px] font-semibold",
+                isActive ? "bg-white/20" : "bg-slate-700"
               )}>
                 {counts[cat.id]}
               </span>
