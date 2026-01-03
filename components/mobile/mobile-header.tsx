@@ -44,11 +44,18 @@ export function MobileHeader() {
     if (isLoading) return "Detecting..."
     if (error) return "Enable Location"
     if (!district && !city) return "Detecting..."
+    // If district is "Unknown District" or similar, show city instead
+    if (district === "Unknown District" || district === "Current Location") {
+      return city || "Your Location"
+    }
     return district || city || "Your Location"
   }
 
   const getCityText = () => {
     if (isLoading || error || !city) return ""
+    // Only show city if it's different from what's shown in main text
+    const mainText = getLocationText()
+    if (mainText === city) return ""
     return city
   }
 

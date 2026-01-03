@@ -104,12 +104,31 @@ export async function reverseGeocode(lat: number, lng: number): Promise<Location
       throw new Error(data?.error || "No results found")
     }
 
+    // Get the best district/locality name from various OSM fields
+    const district = data.address?.suburb ||
+      data.address?.neighbourhood ||
+      data.address?.city_district ||
+      data.address?.locality ||
+      data.address?.hamlet ||
+      data.address?.village ||
+      data.address?.county ||
+      data.address?.state_district ||
+      null
+
+    // Get the city name
+    const city = data.address?.city ||
+      data.address?.town ||
+      data.address?.municipality ||
+      data.address?.state ||
+      null
+
     const result: LocationDetails = {
       lat: parseFloat(data.lat),
       lng: parseFloat(data.lon),
       displayName: data.display_name,
-      district: data.address?.suburb || data.address?.neighbourhood || data.address?.city_district || "Unknown District",
-      city: data.address?.city || data.address?.town || data.address?.village || "Unknown City",
+      // If no district, use city; if no city either, mark as unknown
+      district: district || city || "Unknown District",
+      city: city || district || "Unknown City",
       country: data.address?.country || "Unknown Country",
       address: {
         road: data.address?.road,

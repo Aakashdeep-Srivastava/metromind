@@ -124,10 +124,10 @@ export const useAppStore = create<AppState>()(
         }),
     })),
     {
-      name: 'metromind-storage',
+      name: 'metromind-storage-v2',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        location: state.location,
+        // Don't persist location - always fetch fresh
         newsFilter: state.newsFilter,
         activeTab: state.activeTab,
       }),

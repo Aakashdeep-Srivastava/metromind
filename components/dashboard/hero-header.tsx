@@ -1,8 +1,8 @@
 "use client"
 
 import { motion } from 'framer-motion'
-import { MapPin, RefreshCw, Sparkles, CloudSun, Wind, Droplets } from 'lucide-react'
-import { useAppStore } from '@/stores/app-store'
+import { MapPin, RefreshCw, Sparkles } from 'lucide-react'
+import { useLocation } from '@/contexts/location-context'
 import { cn } from '@/lib/utils'
 
 interface HeroHeaderProps {
@@ -37,9 +37,9 @@ const weatherDesc: Record<number, string> = {
 }
 
 export function HeroHeader({ isRefreshing, onRefresh, weather }: HeroHeaderProps) {
-  const { location } = useAppStore()
+  // Use LocationContext directly for fresh data
+  const { district, city, isLoading } = useLocation()
   const currentHour = new Date().getHours()
-  const isLocationLoading = location.isLoading || (!location.city && !location.district)
 
   const getGreeting = () => {
     if (currentHour < 12) return 'Good Morning'
@@ -54,6 +54,11 @@ export function HeroHeader({ isRefreshing, onRefresh, weather }: HeroHeaderProps
     if (currentHour < 20) return '🌆'
     return '🌙'
   }
+
+  // Get display location - prefer district, fallback to city
+  const displayLocation = district && district !== 'Unknown District' && district !== 'Current Location'
+    ? district
+    : city || 'Your Location'
 
   return (
     <motion.div
@@ -109,12 +114,12 @@ export function HeroHeader({ isRefreshing, onRefresh, weather }: HeroHeaderProps
           transition={{ delay: 0.15 }}
           className="text-xl font-bold text-white mb-3"
         >
-          {isLocationLoading ? (
+          {isLoading ? (
             <span className="inline-block w-36 h-6 bg-slate-700/50 rounded-lg animate-pulse" />
           ) : (
             <span className="flex items-center gap-2">
               <MapPin className="w-4 h-4 text-cyan-400" />
-              {location.district || location.city || 'Your Location'}
+              {displayLocation}
             </span>
           )}
         </motion.h1>
