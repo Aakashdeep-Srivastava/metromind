@@ -15,7 +15,8 @@
       "Bash(pnpm build:*)",
       "Bash(git commit:*)",
       "Bash(gh --version:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(npm run dev:*)"
     ]
   }
 }
