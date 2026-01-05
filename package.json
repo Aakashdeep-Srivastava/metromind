@@ -12,7 +12,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.36.5",
     "@emotion/is-prop-valid": "^1.4.0",
-    "@googlemaps/js-api-loader": "^1.16.10",
+    "@googlemaps/js-api-loader": "^2.0.2",
     "@hookform/resolvers": "^3.10.0",
     "@legendapp/state": "^2.1.15",
     "@lottiefiles/dotlottie-react": "^0.8.12",
